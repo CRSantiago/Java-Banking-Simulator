@@ -5,7 +5,7 @@ public interface TheBank {
 	public abstract void deposit(int depositAmount, String threadNamee);
 	
 	// withdrawal arguments: withdrawal amount, thread name making withdrawal
-	public abstract void withdrawal(int withdrawalAmount, String threadName);
+	public abstract void withdrawal(int withdrawalAmount, String threadName) throws InterruptedException;
 	
 	// flagged transaction are logged independently in a log file
 	// flag transaction arguments: transactiona amount, thread name making transactions, type of thread making transactions

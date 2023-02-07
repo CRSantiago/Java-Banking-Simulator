@@ -1,24 +1,39 @@
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class ABankAccount implements TheBank{
 		private int balance = 0;
+		private Lock accessLock = new ReentrantLock();
+		private Condition sufficientFundsCondition = accessLock.newCondition();
 		
 		public void deposit(int depositAmount, String threadName) {
-			balance += depositAmount;
-			System.out.println(threadName + " deposits $" + depositAmount + "\t\t" + "(+) Balance is $" + balance);
+			accessLock.lock();
+			try {
+				balance += depositAmount;
+				System.out.println(threadName + " deposits $" + depositAmount + "\t\t\t\t\t\t" + "(+) Balance is $" + balance);
+				sufficientFundsCondition.signalAll();
+			} finally {
+				accessLock.unlock();
+			}
 		}
 		
 		
-		public void withdrawal(int withdrawalAmount, String threadName) {
-			System.out.print("\t\t" + threadName + " withdraws " + withdrawalAmount);
-			if(withdrawalAmount <= balance) {
+		public void withdrawal(int withdrawalAmount, String threadName) throws InterruptedException {
+			accessLock.lock();
+			System.out.print("\t\t\t\t" + threadName + " withdraws $" + withdrawalAmount);
+			try {
+				while(balance < withdrawalAmount) {
+					System.out.print("\t\t(*****) WITHDRAWAL BLOCKED - INSUFFICIENT FUNDS!!!");
+					System.out.println();
+					sufficientFundsCondition.await();
+				}
 				balance -= withdrawalAmount;
-				System.out.print("\t\t(-) Balance is " + balance);
+			} finally {
+				System.out.print("\t\t(-) Balance is $" + balance);
 				System.out.println();
-			} else {
-				System.out.print("\t\t(*****) WITHDRAWAL BLOCKED - INSUFFICIENT FUNDS!!!");
-				System.out.println();
+				accessLock.unlock();
 			}
-			
 		}
 		
 		public void flagged_transactions(int transactionAmount,String threadName, String threadType) {

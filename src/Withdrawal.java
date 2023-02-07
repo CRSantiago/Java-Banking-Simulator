@@ -10,12 +10,21 @@ public class Withdrawal implements Runnable{
 	String threadName;
 	
 	public Withdrawal(ABankAccount shared, String name) {
-		sharedLocation = shared;
-		threadName = name;
+		this.sharedLocation = shared;
+		this.threadName = name;
 	}
 	
 	public void run() {
 //		System.out.println("Hi! My name is " + threadName);
-		sharedLocation.withdrawal(generator.nextInt(MAX_WITHDRAWAL) + 1, threadName);
+		while(true) {
+			int amount = generator.nextInt(MAX_WITHDRAWAL) + 1;
+			try {
+				sharedLocation.withdrawal(amount, threadName);
+				Thread.sleep(sleepTime.nextInt(1500)+1);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 }

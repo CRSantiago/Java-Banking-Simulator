@@ -11,19 +11,21 @@ public class Depositor implements Runnable{
 	String threadName;
 	
 	public Depositor(ABankAccount shared, String name) {
-		sharedLocation = shared;
-		threadName = name;
+		this.sharedLocation = shared;
+		this.threadName = name;
 	}
 	
 	public void run() {
 //		System.out.println("Hi! My name is " + threadName);
 //		sharedLocation.deposit(generator.nextInt(MAX_DEPOSIT) + 1, threadName);
-		try {
-			sharedLocation.deposit(generator.nextInt(MAX_DEPOSIT) + 1, threadName);
-			Thread.sleep(sleepTime.nextInt(3000)+1);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		while(true) {
+			try {
+				sharedLocation.deposit(generator.nextInt(MAX_DEPOSIT) + 1, threadName);
+				Thread.sleep(sleepTime.nextInt(3000)+1);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 }
