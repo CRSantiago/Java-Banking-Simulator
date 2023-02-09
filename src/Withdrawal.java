@@ -14,13 +14,14 @@ public class Withdrawal implements Runnable{
 		this.threadName = name;
 	}
 	
+	@Override
 	public void run() {
 //		System.out.println("Hi! My name is " + threadName);
 		while(true) {
 			int amount = generator.nextInt(MAX_WITHDRAWAL) + 1;
 			try {
 				sharedLocation.withdrawal(amount, threadName);
-				Thread.sleep(sleepTime.nextInt(1500)+1);
+				Thread.sleep(sleepTime.nextInt(1000)+1);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

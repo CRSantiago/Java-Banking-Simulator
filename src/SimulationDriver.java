@@ -25,6 +25,7 @@ public class SimulationDriver {
 			application.execute(new Withdrawal(sharedLocation, "Agent WT8"));
 			application.execute(new Withdrawal(sharedLocation, "Agent WT10"));
 			application.execute(new Withdrawal(sharedLocation, "Agent WT9"));
+			application.execute(new Auditor(sharedLocation));
 		} catch ( Exception exception ) {
 			exception.printStackTrace();
 		}

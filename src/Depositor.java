@@ -15,6 +15,7 @@ public class Depositor implements Runnable{
 		this.threadName = name;
 	}
 	
+	@Override
 	public void run() {
 //		System.out.println("Hi! My name is " + threadName);
 //		sharedLocation.deposit(generator.nextInt(MAX_DEPOSIT) + 1, threadName);
