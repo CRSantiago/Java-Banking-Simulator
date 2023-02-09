@@ -14,6 +14,10 @@ public class ABankAccount implements TheBank{
 				balance += depositAmount;
 				transactionNumber += 1;
 				System.out.println(threadName + " deposits $" + depositAmount + "\t\t\t\t\t\t" + "(+) Balance is $" + balance + "\t\t\t\t" + transactionNumber);
+				if(depositAmount > 350) {
+					System.out.println();
+					flagged_transactions(depositAmount, threadName, "Deposit");
+				}
 				sufficientFundsCondition.signalAll();
 			} finally {
 				accessLock.unlock();
@@ -27,15 +31,15 @@ public class ABankAccount implements TheBank{
 			try {
 				if(balance < withdrawalAmount) {
 					System.out.println("\t\t\t\t" + threadName + " withdraws $" + withdrawalAmount + "\t\t(*****) WITHDRAWAL BLOCKED - INSUFFICIENT FUNDS!!!");
-//					System.out.print("\t\t(*****) WITHDRAWAL BLOCKED - INSUFFICIENT FUNDS!!!");
-//					System.out.println();
 					sufficientFundsCondition.await();
 				} else {
 					balance -= withdrawalAmount;
 					transactionNumber += 1;
 					System.out.println("\t\t\t\t" + threadName + " withdraws $" + withdrawalAmount + "\t\t(-) Balance is $" + balance + "\t\t\t\t" + transactionNumber);
-//					System.out.print("\t\t(-) Balance is $" + balance);
-//					System.out.println();
+					if(withdrawalAmount > 75) {
+						System.out.println();
+						flagged_transactions(withdrawalAmount, threadName, "Withdrawal");
+					}
 				}
 			} finally {
 				accessLock.unlock();
@@ -51,6 +55,14 @@ public class ABankAccount implements TheBank{
 		}
 		
 		public void flagged_transactions(int transactionAmount,String threadName, String threadType) {
-			
+			// TODO - Log transaction in text file
+			double excessAmount = 0.0;
+			if(threadType.equals("Withdrawal")) {
+				excessAmount = 75.00;
+			} else {
+				excessAmount = 350.00;
+			}
+			System.out.println("* * * Flagged Transaction - " + threadType + " " + threadName + " Made a " + threadType + " In Excess of $" + excessAmount + " USD - See Flagged Transaction Log");
+			System.out.println();
 		}
 }

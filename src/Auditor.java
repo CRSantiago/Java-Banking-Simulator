@@ -14,15 +14,15 @@ public class Auditor implements Runnable{
 	@Override
 	public void run() {
 		while(true) {
+			System.out.println();
+			System.out.println("**************************************************************************************************************************************************");
+			System.out.println();
+			System.out.println("\t\tAUDITOR FIND CURRENT ACCOUNT BALANCE TO BE: $" + sharedLocation.getBalance() + "\t\t Number of transactions since last audit is: " + (sharedLocation.getTransactionNumber() - transactionNumberAtLastAudit));
+			System.out.println();
+			System.out.println("***************************************************************************************************************************************************");
+			System.out.println();
+			transactionNumberAtLastAudit = sharedLocation.getTransactionNumber();
 			try {
-				System.out.println();
-				System.out.println("**************************************************************************************************************************************************");
-				System.out.println();
-				System.out.println("\t\tAUDITOR FIND CURRENT ACCOUNT BALANCE TO BE: $" + sharedLocation.getBalance() + "\t\t Number of transactions since last audit is: " + (sharedLocation.getTransactionNumber() - transactionNumberAtLastAudit));
-				System.out.println();
-				System.out.println("***************************************************************************************************************************************************");
-				System.out.println();
-				transactionNumberAtLastAudit = sharedLocation.getTransactionNumber();
 				Thread.sleep(sleepTime.nextInt(5000)+1);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
