@@ -1,3 +1,11 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
+import java.util.Locale;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -55,7 +63,6 @@ public class ABankAccount implements TheBank{
 		}
 		
 		public void flagged_transactions(int transactionAmount,String threadName, String threadType) {
-			// TODO - Log transaction in text file
 			double excessAmount = 0.0;
 			if(threadType.equals("Withdrawal")) {
 				excessAmount = 75.00;
@@ -64,5 +71,17 @@ public class ABankAccount implements TheBank{
 			}
 			System.out.println("* * * Flagged Transaction - " + threadType + " " + threadName + " Made a " + threadType + " In Excess of $" + excessAmount + " USD - See Flagged Transaction Log");
 			System.out.println();
+			File file = new File("flagged_transactions.txt");
+			LocalDateTime now = LocalDateTime.now();
+	        ZoneId zoneId = ZoneId.systemDefault();
+	        String shortZoneId = zoneId.getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
+	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+
+	        String formattedDateTime = now.format(formatter) + " " + shortZoneId;
+			try (FileWriter writer = new FileWriter(file, true)) {
+	            writer.write(threadType + " " + threadName + " issued a " + threadType + " of $" + transactionAmount + " at " + formattedDateTime + "  Transaction Number : " + transactionNumber + System.lineSeparator());
+	        } catch (IOException e) {
+	            System.out.println("Error writing to file " + file + ": " + e.getMessage());
+	        }
 		}
 }
