@@ -1,3 +1,9 @@
+/* Name: Christopher Santiago
+ Course: CNT 4714 Spring 2023
+ Assignment title: Project 2 – Synchronized, Cooperating Threads Under Locking
+ Due Date: February 15, 2023
+*/
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -9,6 +15,9 @@ public class SimulationDriver {
 	public static void main(String args[]) {
 		ExecutorService application = Executors.newFixedThreadPool(MAX_AGENTS);
 		ABankAccount sharedLocation = new ABankAccount();
+		System.out.println("Deposit Agents\t\t\tWithdrawal Agents\t\t\tBalance\t\t\tTransaction Number");
+		System.out.println("--------------\t\t\t------------------\t\t---------------------\t\t-------------------");
+		System.out.println();
 		try {
 			application.execute(new Withdrawal(sharedLocation, "Agent WT5"));
 			application.execute(new Depositor(sharedLocation, "Agent DT4"));
